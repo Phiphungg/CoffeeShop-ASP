@@ -1,0 +1,169 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section PRODUCTS{
+    <div class="Products">
+
+    </div>
+}
+
+@section Script{
+    <script type="text/javascript">
+        var isUpdatable = false;
+        var currentUpdatePath = "";
+        var currentId = 0;
+
+        $(document).ready(function () {
+            showCinemaMovies();
+
+            $("#btnCreateNew").click(function (e) {
+                isUpdatable = false;
+                $("#title").text("Create New");
+            });
+
+            $("#btnClose").click(function (e) {
+                clearModalContent();
+            });
+
+            $("#btnSave").click(function (e) {
+
+                var data = {
+                    Id: $("#Id").val(),
+                    MovieName: $.trim($("#CoffeeName").val()),
+                    ImagePath: $("#ImagePath").val(),
+                    Type: $("#CoffeeType").val()
+                }
+
+                if (!isUpdatable) {
+                    if (!data.ImagePath || !data.CoffeeName) {
+                        alert("You should input CoffeeName and choose picture");
+                        return;
+                    }
+                }
+                else {
+                    if (!data.ImagePath)
+                        data.ImagePath = currentUpdatePath;
+                    data.Id = currentId;
+                }
+
+                alert(data.ImagePath);
+                $("#UploadForm").submit();
+
+                if (!isUpdatable) {
+                    $.ajax({
+                        url: '/Home/Create/',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: data,
+                        success: function (data) {
+                            showCoffeeShop();
+                            clearModalContent();
+                        },
+                        error: function (err) {
+                            alert("Error:" + err.responseText);
+                        }
+                    });
+                }
+                else {
+                    $.ajax({
+                        url: '/Home/Update/',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: data,
+                        success: function (data) {
+                            showCoffeeShop();
+                            clearModalContent();
+                        },
+                        error: function (err) {
+                            alert("Error:" + err.responseText);
+                        }
+                    });
+                }
+            });
+            function clearModalContent() {
+                $("#CoffeName").val(""),
+                    $("#ImagePath").val(""),
+                    $("#CoffeeType").val("PRODUCTS");
+                isUpdatable = false;
+            }
+        });
+
+        function showCoffeeShop() {
+            $(".products").empty();
+
+
+            $.ajax({
+                url: '/Home/LisCoffees/',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    $.each(data, function (i, item) {
+                        var id = item.Id;
+                        var coffeename = item.CoffeeName;
+                        varcoffeepath = item.ImagePath;
+                        var classname = "";
+                        if (item.Type == "PRODUCTS")
+                            classname = ".products";
+
+                        AppendNewCoffee(id, classname, coffeename, coffeepath);
+                    });
+                },
+                error: function (err) {
+                    alert("Error:" + err.responseText);
+                }
+            });
+        function AppendNewCoffee(classname, coffeename, coffeepath) {
+            var rows = '';
+            rows += "<li>";
+            rows += "<section class='PRODUCTS'>";
+            rows += "<a href='#'><img src=\"/Assets/" + coffeepath + "\" alt='coffee' /></a>";
+            rows += "<h2><a href='#'>" + coffeename + "</a></h2";
+            rows += "<p>Proin metus odio, ultricies eu pharetra dictum, laoreet id odio. Curabitur in odio augue. Morbi congue auctor interdum. Phasellus sit amet metus justo. </p>";
+            rows += "</section>";
+            rows += "</li>";
+            $(classname).append(rows);
+        }
+     }
+
+        function deletCoffee(id) {
+            var confirmDelete = confirm("Do you want to delete Coffee ?");
+            $.ajax({
+                url: '/Home/Delete/' + id,
+                type: 'POST',
+                dataType: 'json',
+                success: function (data) {
+                    showCoffeeShop() {
+();
+                },
+                error: function (err) {
+                    alert("Error:" + err.responseText);
+                }
+            });
+        }
+
+        function getDetailCoffee(id) {
+            isUpdatable = true;
+            currentUpdatePath = "";
+            currentId = 0;
+            $("#title").text("Edit");
+
+            $.ajax({
+                url: '/Home/Get/' + id,
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    $("#CoffeeName").val(data.CoffeeName);
+                    $("#CoffeeType").val(data.Type.trim());
+                    currentUpdatePath = data.ImagePath;
+                    currentId = data.Id;
+                },
+                error: function (err) {
+                    alert("Error:" + err.responseText);
+                }
+            });
+        }
+    </script>
+}

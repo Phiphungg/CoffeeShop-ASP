@@ -1,0 +1,72 @@
+﻿@{ 
+    Layout = null;
+}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <title>CoffeeCols</title>
+    <link rel="stylesheet" href="~/Assets/css/styles.css" type="text/css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="~/Assets/css/print.css" media="print" />
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+    <script type="text/javascript" src="~/Assets/js/equalcolumns.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!--[if IE]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+    @RenderSection("Script", required: false);
+</head>
+<body>
+
+    <header>
+        <h1>CoffeeCols</h1>
+    </header>
+    <nav>
+        <ul>
+            <li class="selected"><a href="/Inner/Index">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Products</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Support</a></li>
+        </ul>
+    </nav>
+    <section id="intro">
+        <header>
+            <h2>Your Spiffy Tag Line Goes Here</h2>
+        </header>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut.</p>
+        <img src="~/Assets/images/introimage.png" alt="lime" />
+    </section>
+
+
+    <section id="content">
+        <ul class="column">
+
+            @RenderSection("PRODUCTS", required: false)
+        </ul>
+    </section>
+
+    <footer>
+        <section>
+            <h3>Left Stuff</h3>
+            <p>Left aligned text here. Proin metus odio, ultricies eu pharetra dictum, laoreet id odio. Curabitur in odio augue. Morbi congue auctor interdum. Phasellus sit amet metus justo.</p>
+            <p>Next line here</p>
+        </section>
+
+        <section>
+            <h3>Center Stuff</h3>
+            <p>Center Text here. Proin metus odio, ultricies eu pharetra dictum, laoreet id odio. Curabitur in odio augue. Morbi congue auctor interdum. Phasellus sit amet metus justo.</p>
+            <p>Next line here</p>
+        </section>
+
+        <section>
+            <h3>Right Stuff</h3>
+            <p>&copy; 2010 <a href="#" title="your site name">yoursite.com</a> All rights reserved.</p>
+            <p>Center Text here. Proin metus odio, ultricies eu pharetra dictum, laoreet id odio. Curabitur in odio augue. Morbi congue auctor interdum. Phasellus sit amet metus justo.</p>
+        </section>
+
+    </footer>
+    <!-- Free template created by http://freehtml5templates.com -->
+    @RenderSection("MODEL_DIALOG", required: false);
+</body>
+</html>
